@@ -20,3 +20,14 @@ class Review(models.Model):
 
     def __str__(self):
         return str(self.id) + ' - ' + self.movie.name
+
+class Reply(models.Model):
+    id = models.AutoField(primary_key=True)
+    comment = models.CharField(max_length=255)
+    date = models.DateTimeField(auto_now_add=True)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='replies')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    parent_reply = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+
+    def __str__(self):
+        return str(self.id) + ' - Reply to ' + str(self.review.id)
